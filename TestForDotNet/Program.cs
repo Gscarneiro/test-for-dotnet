@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using TestForDotNet.DataAccess;
+using TestForDotNet.Interfaces;
+using TestForDotNet.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IMonsterRepository, MonsterRepository>();
+
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase(databaseName: "ZeldaCompedium"));
 
 var app = builder.Build();
 
