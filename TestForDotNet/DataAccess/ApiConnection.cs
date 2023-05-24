@@ -7,19 +7,14 @@ namespace TestForDotNet.DataAccess
     public class ApiConnection
     {
 
-        public static async Task CreateDatabase(DatabaseContext context)
+        public static async Task<List<MonsterModel>> CallMonsterApi()
         {
             try {
                 var client = new HttpClient();
 
-                var monsters = (await client.GetFromJsonAsync<MonsterResponseModel>("https://botw-compendium.herokuapp.com/api/v2/category/monsters"))?.data;
-
-                if(monsters?.Any() ?? false)
-                    context.AddRange(monsters.OrderBy(m => m.id));
-
-                context.SaveChanges();
+                return (await client.GetFromJsonAsync<MonsterResponseModel>("https://botw-compendium.herokuapp.com/api/v2/category/monsters"))?.data;
             } catch(HttpRequestException) {
-                throw new Exception("Could not connect to Database.");
+                throw new Exception("Could not connect to API.");
             }
         }
     }

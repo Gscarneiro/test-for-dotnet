@@ -5,10 +5,20 @@ namespace TestForDotNet.DataAccess
 {
     public class DatabaseContext: DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options): base(options)
+        private readonly Action<DatabaseContext, ModelBuilder> _modelCustomizer;
+
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, Action<DatabaseContext, ModelBuilder> modelCustomizer = null) : base(options)
         {
+            _modelCustomizer = modelCustomizer;
         }
 
-        public DbSet<MonsterModel> Monsters { get; set; }
+        public virtual DbSet<MonsterModel> Monsters { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            if(_modelCustomizer is not null) {
+                _modelCustomizer(this, modelBuilder);
+            }
+        }
     }
 }

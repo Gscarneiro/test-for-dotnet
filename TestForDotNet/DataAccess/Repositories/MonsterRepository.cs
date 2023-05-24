@@ -15,16 +15,11 @@ namespace TestForDotNet.Repositories
             _context = context;
         }
 
-        public async Task<MonsterModel> Get(int id)
+        public async Task<MonsterModel> GetById(int id)
         {
             await EnsureDatabaseCreated();
 
-            var model = _context.Monsters.FirstOrDefault(m => m.id == id);
-
-            if(model == null)
-                throw new Exception($"Monster with id: {id} was not found.");
-
-            return model;
+            return _context.Monsters.FirstOrDefault(m => m.id == id);
         }
 
         public async Task<List<MonsterModel>> List(string? name = null)
@@ -55,20 +50,29 @@ namespace TestForDotNet.Repositories
         {
             await EnsureDatabaseCreated();
 
-            var dbMonster = await Get(id);
+            var monster = await GetById(id);
 
-            UpdateValues(model, dbMonster);
+            if(monster != null) {
+                UpdateValues(model, monster);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
 
-            return dbMonster;
+            return monster;
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var monster = await Get(id);
-            _context.Monsters.Remove(monster);
-            _context.SaveChanges();
+            var monster = await GetById(id);
+            var deleted = false;
+            if(monster != null) {
+                _context.Monsters.Remove(monster);
+                _context.SaveChanges();
+
+                deleted = true;
+            }
+
+            return deleted;
         }
 
 
@@ -89,8 +93,14 @@ namespace TestForDotNet.Repositories
 
         private async Task EnsureDatabaseCreated()
         {
-            if(!_context.Monsters.Any())
-                await ApiConnection.CreateDatabase(_context);
+            if(!_context.Monsters.Any()) {
+                var monsters = await ApiConnection.CallMonsterApi();
+
+                if(monsters?.Any() ?? false)
+                    _context.AddRange(monsters.OrderBy(m => m.id));
+
+                _context.SaveChanges();
+            }
         }
     }
 }

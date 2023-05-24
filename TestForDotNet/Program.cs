@@ -16,7 +16,16 @@ builder.Services.AddScoped<IMonsterRepository, MonsterRepository>();
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseInMemoryDatabase(databaseName: "ZeldaCompedium"));
 
+
+
 var app = builder.Build();
+
+//using(var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope()) {
+//    var context = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+//    context.Database.EnsureCreated();
+
+//    await ApiConnection.CreateDatabase(context);
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

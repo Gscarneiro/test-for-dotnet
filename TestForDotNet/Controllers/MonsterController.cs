@@ -18,9 +18,14 @@ namespace TestForDotNet.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<MonsterModel> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await monsterRepository.Get(id);
+            var monster = await monsterRepository.GetById(id);
+
+            if(monster != null)
+                return Ok(monster);
+            else
+                return NotFound($"Monster with id: {id} was not found.");
         }
 
         [HttpGet]
@@ -36,9 +41,14 @@ namespace TestForDotNet.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<MonsterModel> Put(int id, [FromBody] MonsterModel model)
+        public async Task<IActionResult> Put(int id, [FromBody] MonsterModel model)
         {
-            return await monsterRepository.Update(id, model);
+            var monster = await monsterRepository.Update(id, model);
+
+            if(monster != null)
+                return Ok(monster);
+            else
+                return NotFound($"Monster with id: {id} was not found.");
         }
 
         [HttpDelete("{id}")]
