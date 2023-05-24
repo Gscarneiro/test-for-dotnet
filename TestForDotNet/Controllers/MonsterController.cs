@@ -22,10 +22,7 @@ namespace TestForDotNet.Controllers
         {
             var monster = await monsterRepository.GetById(id);
 
-            if(monster != null)
-                return Ok(monster);
-            else
-                return NotFound($"Monster with id: {id} was not found.");
+            return monster != null ? Ok(monster) : NotFound($"Monster with id: {id} was not found.");
         }
 
         [HttpGet]
@@ -45,16 +42,15 @@ namespace TestForDotNet.Controllers
         {
             var monster = await monsterRepository.Update(id, model);
 
-            if(monster != null)
-                return Ok(monster);
-            else
-                return NotFound($"Monster with id: {id} was not found.");
+            return monster != null ? Ok(monster) : NotFound($"Monster with id: {id} was not found.");
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await monsterRepository.Delete(id);
+            var deleted = await monsterRepository.Delete(id);
+
+            return deleted ? Ok(deleted) : NotFound($"Monster with id: {id} was not found.");
         }
     }
 }

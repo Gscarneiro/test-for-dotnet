@@ -129,10 +129,10 @@ namespace UnitTest
             //Arrange
             using var context = CreateContext();
             MonsterRepository monsterRepository = new(context);
-            var id = 100;
+            var id = 101;
 
             //Act
-            var deleted = (await monsterRepository.Delete(101));
+            var deleted = (await monsterRepository.Delete(id));
 
             //Assert
             Assert.True(deleted);
@@ -147,17 +147,18 @@ namespace UnitTest
             var id = 999;
 
             //Act
-            var deleted = (await monsterRepository.Delete(999));
+            var deleted = (await monsterRepository.Delete(id));
 
             //Assert
             Assert.False(deleted);
         }
 
-        DatabaseContext CreateContext() => new DatabaseContext(_contextOptions, (context, modelBuilder) => {
-            #region ToInMemoryQuery
-            modelBuilder.Entity<MonsterModel>()
-                .ToInMemoryQuery(() => context.Monsters.Select(b => b));
-            #endregion
-        });
+        private DatabaseContext CreateContext()
+        {
+            return new DatabaseContext(_contextOptions, (context, modelBuilder) => {
+                modelBuilder.Entity<MonsterModel>()
+                    .ToInMemoryQuery(() => context.Monsters.Select(b => b));
+            });
+        }
     }
 }
