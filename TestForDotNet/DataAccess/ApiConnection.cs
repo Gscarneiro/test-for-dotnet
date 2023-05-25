@@ -10,9 +10,7 @@ namespace TestForDotNet.DataAccess
         public static async Task<List<MonsterModel>> CallMonsterApi()
         {
             try {
-                var client = new HttpClient();
-
-                return (await client.GetFromJsonAsync<MonsterResponseModel>("https://botw-compendium.herokuapp.com/api/v2/category/monsters"))?.data;
+                return (await new HttpClient().GetFromJsonAsync<MonsterResponseModel>("https://botw-compendium.herokuapp.com/api/v2/category/monsters"))?.data;
             } catch(HttpRequestException) {
                 throw new Exception("Could not connect to API.");
             }
