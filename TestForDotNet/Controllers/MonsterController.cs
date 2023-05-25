@@ -32,9 +32,11 @@ namespace TestForDotNet.Controllers
         }
 
         [HttpPost]
-        public async Task<MonsterModel> Post([FromBody] MonsterModel model)
+        public async Task<IActionResult> Post([FromBody] MonsterModel model)
         {
-            return await monsterRepository.Insert(model);
+            var monster =  await monsterRepository.Insert(model);
+
+            return monster.id != 0 ? Ok(monster) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpPut("{id}")]
