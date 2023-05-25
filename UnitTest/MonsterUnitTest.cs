@@ -1,11 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Moq;
-using Moq.EntityFrameworkCore;
 using TestForDotNet.DataAccess;
 using TestForDotNet.Models;
 using TestForDotNet.Repositories;
-using MockQueryable.Moq;
-using Microsoft.AspNetCore.Mvc;
 
 namespace UnitTest
 {

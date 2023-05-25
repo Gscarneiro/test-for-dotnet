@@ -3,7 +3,7 @@ using TestForDotNet.Models;
 
 namespace TestForDotNet.DataAccess
 {
-    public class DatabaseContext: DbContext
+    public class DatabaseContext : DbContext
     {
         private readonly Action<DatabaseContext, ModelBuilder> _modelCustomizer;
 

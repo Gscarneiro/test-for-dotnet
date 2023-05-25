@@ -1,6 +1,4 @@
-﻿using TestForDotNet.Repositories;
-using TestForDotNet.Interfaces;
-using TestForDotNet.Models;
+﻿using TestForDotNet.Models;
 
 namespace TestForDotNet.DataAccess
 {

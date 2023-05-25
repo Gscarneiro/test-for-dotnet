@@ -2,8 +2,6 @@
 using TestForDotNet.Interfaces;
 using TestForDotNet.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace TestForDotNet.Controllers
 {
     [Route("api/[controller]")]
@@ -34,7 +32,7 @@ namespace TestForDotNet.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] MonsterModel model)
         {
-            var monster =  await monsterRepository.Insert(model);
+            var monster = await monsterRepository.Insert(model);
 
             return monster.id != 0 ? Ok(monster) : StatusCode(StatusCodes.Status500InternalServerError);
         }
